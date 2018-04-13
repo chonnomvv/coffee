@@ -25,17 +25,17 @@ public class MemberDAO {
         try {
             System.out.println("트라이 안에 들어옴");
             pstmt = con.prepareStatement(sql);
-            pstmt.setString(1,vo.getId());
-            pstmt.setString(2,vo.getName());
-            pstmt.setString(3,vo.getPw());
-            pstmt.setString(4,vo.getBirth());
-            pstmt.setString(5,vo.getZipcode());
-            pstmt.setString(6,vo.getLang());
-            pstmt.setString(7,vo.getTool());
+            pstmt.setString(1, vo.getId());
+            pstmt.setString(2, vo.getName());
+            pstmt.setString(3, vo.getPw());
+            pstmt.setString(4, vo.getBirth());
+            pstmt.setString(5, vo.getZipcode());
+            pstmt.setString(6, vo.getLang());
+            pstmt.setString(7, vo.getTool());
 
             int affectedcount = pstmt.executeUpdate();
             System.out.println("트라이 마지막 줄");
-            if(affectedcount>0){
+            if (affectedcount > 0) {
                 System.out.println("AFFECTEDCOUNT");
                 flag = true;
                 System.out.println(flag);
@@ -48,9 +48,10 @@ public class MemberDAO {
 
         return flag;
     }
-    public ArrayList<MemberVO> request_list(){
 
-        ArrayList<MemberVO> list =null;
+    public ArrayList<MemberVO> request_list() {
+
+        ArrayList<MemberVO> list = null;
         ConnectionManager mgr = new ConnectionManager();
         String sql = ("select * from coffee_tbl");
         Connection con = mgr.getConnection();
@@ -58,9 +59,9 @@ public class MemberDAO {
         PreparedStatement pstmt = null;
         try {
             list = new ArrayList<MemberVO>();
-            pstmt =  con.prepareStatement(sql);
+            pstmt = con.prepareStatement(sql);
             ResultSet rs = pstmt.executeQuery();
-            while(rs.next()){
+            while (rs.next()) {
                 System.out.println("while 문 안에 들어옴");
                 MemberVO vo = new MemberVO();
                 vo.setId(rs.getString(1));
@@ -78,7 +79,40 @@ public class MemberDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    return list;
+        return list;
+
+    }
+    public ArrayList<MemberVO> request_list_part(String id){
+        System.out.println("리퀘스트리스트파트1");
+        System.out.println(id);
+        ArrayList<MemberVO> list = null;
+        ConnectionManager mgr = new ConnectionManager();
+        String sql = ("select * from coffee_tbl where user_id ='"+id+"'");
+        Connection con = mgr.getConnection();
+        PreparedStatement pstmt = null;
+        System.out.println("리퀘스트리스트파트22");
+        try {
+            list = new ArrayList<MemberVO>();
+            pstmt = con.prepareStatement(sql);
+            ResultSet rs = pstmt.executeQuery();
+            System.out.println("리퀘스트리스트파트3");
+            while(rs.next()){
+                System.out.println("리퀘스트리스트파트44");
+                MemberVO vo = new MemberVO();
+                vo.setId(rs.getString(1));
+                vo.setName(rs.getString(2));
+                vo.setPw(rs.getString(3));
+                vo.setBirth(rs.getString(4));
+                vo.setZipcode(rs.getString(5));
+                vo.setLang(rs.getString(6));
+                vo.setTool(rs.getString(7));
+                list.add(vo);
+            }
+            mgr.connectClose(con, pstmt, rs);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return list;
 
     }
 }
